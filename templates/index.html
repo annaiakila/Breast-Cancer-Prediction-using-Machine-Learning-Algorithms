@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Breast Cancer Prediction</title>
+
+    <!-- IMPORTANT: cache busting -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=2">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Breast Cancer Prediction System</h1>
+        <p>Machine Learning based diagnosis</p>
+
+        <form action="/predict" method="POST" class="grid-form">
+
+            <!-- Model features (order is important): ['Year','Age','Menopause','Tumor Size (cm)','Inv-Nodes','Breast','Metastasis','Breast Quadrant','History'] -->
+
+            <div class="field">
+                <label for="year">Year</label>
+                <input id="year" type="number" name="Year" min="2010" max="2030" value="2019" required>
+            </div>
+
+            <div class="field">
+                <label for="age">Age</label>
+                <input id="age" type="number" name="Age" min="10" max="120" value="40" required>
+            </div>
+
+            <div class="field">
+                <label for="menopause">Menopause</label>
+                <select id="menopause" name="Menopause" required>
+                    <option value="0">0 — No</option>
+                    <option value="1" selected>1 — Yes</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="tumor">Tumor Size (cm)</label>
+                <input id="tumor" type="number" step="any" name="TumorSize" min="0" max="50" value="3" required>
+            </div>
+
+            <div class="field">
+                <label for="invnodes">Inv-Nodes</label>
+                <input id="invnodes" type="number" name="InvNodes" min="0" max="50" value="0" required>
+            </div>
+
+            <div class="field">
+                <label for="breast">Breast</label>
+                <select id="breast" name="Breast" required>
+                    <option value="0">0 — Unknown / #</option>
+                    <option value="1">1 — Left</option>
+                    <option value="2">2 — Right</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="metastasis">Metastasis</label>
+                <select id="metastasis" name="Metastasis" required>
+                    <option value="0">0 — No</option>
+                    <option value="1">1 — Yes</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="quadrant">Breast Quadrant</label>
+                <select id="quadrant" name="BreastQuadrant" required>
+                    <option value="0">0 — Unknown / #</option>
+                    <option value="1">1 — Lower inner</option>
+                    <option value="2">2 — Lower outer</option>
+                    <option value="3">3 — Upper inner</option>
+                    <option value="4">4 — Upper outer</option>
+                    <option value="5">5 — Upper outer (alt)</option>
+                </select>
+            </div>
+
+            <div class="field">
+                <label for="history">History</label>
+                <select id="history" name="History" required>
+                    <option value="0">0 — No</option>
+                    <option value="1">1 — Yes</option>
+                </select>
+            </div>
+
+            <button type="submit">Predict Cancer</button>
+        </form>
+
+        <div class="legend">
+            <h4>Feature encodings (for reference) </h4>
+            <ul>
+                <li><strong>Breast:</strong> 0=Unknown, 1=Left, 2=Right</li>
+                <li><strong>Breast Quadrant:</strong> 0=Unknown, 1=Lower inner, 2=Lower outer, 3=Upper inner, 4=Upper outer, 5=Upper outer (trailing space in data)</li>
+                <li><strong>Diagnosis:</strong> 0=Benign, 1=Malignant</li>
+            </ul>
+            <p class="note">Note: Inputs are sent in the model's expected order. If you'd like, I can switch the Flask endpoint to accept named inputs to be order-independent.</p>
+        </div>
+
+        {% if prediction_text %}
+        <div class="result">
+            {{ prediction_text }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
